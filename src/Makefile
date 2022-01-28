@@ -15,10 +15,19 @@
 # Use: make [TARGET] [PLATFORM-OVERRIDES]
 #
 # Build Targets:
-#      <Put a description of the supported targets here>
+#      
+#		<FILE>.i  		Builds <FILE>.i implementation file (-E flag)
+#		<FILE>.asm  	Builds <FILE>.asm assembly file 	(-S flag and objdump)
+#		<FILE>.o  		Builds <FILE>.o object files 		(WIthout linking)
+#		compile-all 	Compiles all object files without linking
+#		build 			Compiles and links all object files into a final executable
+#						Needes a.PHONY protection 
+#		clean 			Removes all generated files
+#						Needs a .PHONY protection
 #
 # Platform Overrides:
-#      <Put a description of the supported Overrides here
+#		MSP432
+#		HOST
 #
 #------------------------------------------------------------------------------
 include sources.mk
@@ -27,7 +36,7 @@ include sources.mk
 PLATFORM = 
 
 # Architectures Specific Flags
-LINKER_FILE = 
+LINKER_FILE = MKL25Z128xxx4_flash.ld
 CPU = 
 ARCH = 
 SPECS = 
@@ -38,4 +47,3 @@ LD =
 LDFLAGS = 
 CFLAGS = 
 CPPFLAGs = 
-
