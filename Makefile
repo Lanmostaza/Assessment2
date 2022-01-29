@@ -30,38 +30,43 @@
 #------------------------------------------------------------------------------
 include sources.mk
 
-# Compiler --------------------------------------
-ifeq ($(PLATFORM),HOST)
-	CC = gcc
-	CPPFLAGS =	-I/src \
-				-I/include/CMSIS \
-				-I/include/common
-else
-	CC = arm-none-eabi-gcc
-endif
+# Architectures Specific Flags - only for ARM
+CPU = cortex-m4
+ARCH = thumb
+MARCH = armv7e-m
+MFLOATABI = hard
+MFPU = fpv4-sp-d16
+SPECS = nosys.specs
 
-CFLAGS = -Wall -Werror -g -O0 -std=c99 # for both 
-#LDFLAGS = 
-
-# Architectures Specific Flags
+# Platform Specific Flags - only for MSP432
 LINKER_FILE = MKL25Z128xxx4_flash.ld
-#CPU = 
-#ARCH = 
-#SPECS = 
 
 # Compiler Flags and Defines
-#LD = 
+TARGET = c1m2
+CPPFLAGS = $(INCLUDES) 
+CFLAGS  = -Wall -Werror -g -O0 -std=c99 -I
+LDFLAGS = -Wl,-Map=$(TARGET).map -T $(LINKER_FILE)
 
-# Platform Overrides
-# PLATFORM =  
+ifeq ($(PLATFORM),HOST)
+	CC = gcc 
+else
+	CC = arm-none-eabi-gcc 
+endif
 
 OBJECTS = $(SOURCES:.c=.o)
-TARGET = c1m2
 
-$(TARGET): $(OBJECTS)
-	$(CC) $(CFLAGS) $(CPPFLAGS)-o $@ $^
+%.o : %.c
+	$(CC) -c $< $(CFLAGS) -o $@
+
+.PHONY: build
+build: all
+
+.PHONY: all
+all: $(TARGET).out
+
+$(TARGET).out: $(OBJECTS)
+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@
 
 .PHONY: clean
-
 clean:
-	rm -f $(TARGET) $(OBJECTS) core
+	rm -f $(OBJECTS) $(TARGET).out $(TARGET).map

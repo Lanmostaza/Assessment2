@@ -9,22 +9,12 @@
 #
 #*****************************************************************************
 ifeq ($(PLATFORM),HOST)
-	SOURCES	=	main.c \
-		  		memory.c
-
-	# Add your include paths to this variable
-	INCLUDES =	-L/src \
-				-L/include/CMSIS \
-				-L/include/common 
+	SOURCES	=	src/main.c \
+		  		src/memory.c
 else
-	SOURCES	=	main.c \
-		  		memory.c \
-		  		system_msp432p401r.c \
-		  		startup_msp432p401r_gcc.c \
-		  		interrupts_msp432p401r_gcc.c
-
-	# Add your include paths to this variable
-	INCLUDES =	-L/src \
-				-L/include/common \
-				-L/inlcude/msp432 
+	SOURCES	=	src/main.c \
+		  		src/memory.c \
+		  		src/system_msp432p401r.c \
+		  		src/startup_msp432p401r_gcc.c \
+		  		src/interrupts_msp432p401r_gcc.c
 endif
